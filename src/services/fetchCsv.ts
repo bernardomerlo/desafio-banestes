@@ -10,7 +10,7 @@ export async function fetchCsv<T>(url: string): Promise<T[]> {
       skipEmptyLines: true,
       dynamicTyping: true,
       complete: (results) => resolve(results.data),
-      error: (error) => reject(error),
+      error: (error: Error) => reject(error),
     });
   });
 }
