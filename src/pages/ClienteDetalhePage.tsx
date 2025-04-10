@@ -28,7 +28,7 @@ export default function ClienteDetalhesPage() {
       fetchCsv<Agencia>(AGENCIAS_URL),
     ]).then(([clientesData, contasData, agenciasData]) => {
       const clienteEncontrado = clientesData.find(
-        (c) => c.id.toString().trim() === id?.trim()
+        (c) => c.id.toString().trim() === id?.trim(),
       );
       if (!clienteEncontrado) {
         setLoading(false);
@@ -53,7 +53,7 @@ export default function ClienteDetalhesPage() {
         }));
 
       const agenciaCliente = agenciasData.find(
-        (a) => a.codigo === clienteConvertido.codigoAgencia
+        (a) => a.codigo === clienteConvertido.codigoAgencia,
       );
 
       setCliente(clienteConvertido);

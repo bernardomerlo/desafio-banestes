@@ -31,7 +31,7 @@ const ClientesPage = () => {
       [cliente.nome, cliente.cpfCnpj]
         .join(" ")
         .toLowerCase()
-        .includes(filtro.toLowerCase())
+        .includes(filtro.toLowerCase()),
     );
   }, [clientes, filtro]);
 
