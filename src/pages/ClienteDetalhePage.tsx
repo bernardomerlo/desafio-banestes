@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useClienteDetalhes } from "../hooks/useClienteDetalhes";
+import { formatarCpfCnpj } from "../utils/formatarCpfCnpj";
 
 export default function ClienteDetalhesPage() {
   const { id } = useParams<{ id: string }>();
@@ -34,7 +35,7 @@ export default function ClienteDetalhesPage() {
           </div>
           <div>
             <dt className="font-medium">CPF/CNPJ</dt>
-            <dd>{cliente.cpfCnpj}</dd>
+            <dd>{formatarCpfCnpj(cliente.cpfCnpj)}</dd>
           </div>
           <div>
             <dt className="font-medium">RG</dt>

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useClientes } from "../hooks/useClientes";
 import { useNavigate } from "react-router-dom";
+import { formatarCpfCnpj } from "../utils/formatarCpfCnpj";
 
 const porPagina = 10;
 
@@ -82,7 +83,7 @@ export const ClientesPage = () => {
                       {cliente.nome}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                      {cliente.cpfCnpj}
+                      {formatarCpfCnpj(cliente.cpfCnpj)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                       {cliente.email}
