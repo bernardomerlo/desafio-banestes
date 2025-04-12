@@ -1,30 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
-import { Cliente } from "../types";
-import { fetchCsv } from "../services/fetchCsv";
+import { useState, useMemo } from "react";
+import { useClientes } from "../hooks/useClientes";
+import { useNavigate } from "react-router-dom";
 
-const CLIENTES_URL =
-  "https://docs.google.com/spreadsheets/d/1PBN_HQOi5ZpKDd63mouxttFvvCwtmY97Tb5if5_cdBA/gviz/tq?tqx=out:csv&sheet=clientes";
+const porPagina = 10;
 
-const ClientesPage = () => {
-  const [clientes, setClientes] = useState<Cliente[]>([]);
-  const [loading, setLoading] = useState(true);
+export const ClientesPage = () => {
+  const { clientes, loading } = useClientes();
   const [filtro, setFiltro] = useState("");
   const [pagina, setPagina] = useState(1);
-  const porPagina = 10;
-
-  useEffect(() => {
-    fetchCsv<Cliente>(CLIENTES_URL).then((data) => {
-      const convertidos = data.map((cliente) => ({
-        ...cliente,
-        dataNascimento: new Date(cliente.dataNascimento),
-        rendaAnual: Number(cliente.rendaAnual),
-        patrimonio: Number(cliente.patrimonio),
-        codigoAgencia: Number(cliente.codigoAgencia),
-      }));
-      setClientes(convertidos);
-      setLoading(false);
-    });
-  }, []);
+  const navigate = useNavigate();
 
   const filtrados = useMemo(() => {
     return clientes.filter((cliente) =>
@@ -79,10 +63,7 @@ const ClientesPage = () => {
               {paginados.map((cliente) => (
                 <tr
                   key={cliente.id}
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    (window.location.href = `/clientes/${cliente.id}`)
-                  }
+                  onClick={() => navigate(`/clientes/${cliente.id}`)}
                 >
                   <td>{cliente.nome}</td>
                   <td>{cliente.cpfCnpj}</td>
