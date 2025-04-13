@@ -10,15 +10,38 @@ export const ClientesPage = () => {
   const [filtro, setFiltro] = useState("");
   const [pagina, setPagina] = useState(1);
   const navigate = useNavigate();
+  const [filtrosAvancados, setFiltrosAvancados] = useState({
+    rendaMin: "",
+    rendaMax: "",
+    patrimonioMin: "",
+    patrimonioMax: "",
+    tipoConta: "",
+  });
+
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
 
   const filtrados = useMemo(() => {
-    return clientes.filter((cliente) =>
-      [cliente.nome, cliente.cpfCnpj]
-        .join(" ")
-        .toLowerCase()
-        .includes(filtro.toLowerCase()),
-    );
-  }, [clientes, filtro]);
+    return clientes.filter((cliente) => {
+      const texto = [cliente.nome, cliente.cpfCnpj].join(" ").toLowerCase();
+      const buscaTexto = texto.includes(filtro.toLowerCase());
+
+      const renda = cliente.rendaAnual || 0;
+      const patrimonio = cliente.patrimonio || 0;
+
+      const { rendaMin, rendaMax, patrimonioMin, patrimonioMax } =
+        filtrosAvancados;
+
+      const dentroRenda =
+        (!rendaMin || renda >= parseFloat(rendaMin)) &&
+        (!rendaMax || renda <= parseFloat(rendaMax));
+
+      const dentroPatrimonio =
+        (!patrimonioMin || patrimonio >= parseFloat(patrimonioMin)) &&
+        (!patrimonioMax || patrimonio <= parseFloat(patrimonioMax));
+
+      return buscaTexto && dentroRenda && dentroPatrimonio;
+    });
+  }, [clientes, filtro, filtrosAvancados]);
 
   const paginados = useMemo(() => {
     const inicio = (pagina - 1) * porPagina;
@@ -49,6 +72,82 @@ export const ClientesPage = () => {
           className="w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
         />
       </div>
+      <div className="mb-4 flex justify-end">
+        <button
+          onClick={() => setMostrarFiltros(!mostrarFiltros)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
+        >
+          Filtros Avançados
+        </button>
+      </div>
+      {mostrarFiltros && (
+        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md border border-gray-200 shadow">
+          <div>
+            <label className="block text-sm text-gray-600">
+              Renda Anual Mínima (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.rendaMin}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  rendaMin: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">
+              Renda Anual Máxima (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.rendaMax}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  rendaMax: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">
+              Patrimônio Mínimo (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.patrimonioMin}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  patrimonioMin: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">
+              Patrimônio Máximo (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.patrimonioMax}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  patrimonioMax: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <p className="text-gray-500 text-center">Carregando...</p>
