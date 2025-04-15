@@ -16,6 +16,7 @@ class FakeClienteRepository {
         estadoCivil: "Solteiro",
         rg: "MG-123456",
         codigoAgencia: 1,
+        contas: [],
       },
       {
         id: "2",
@@ -29,6 +30,7 @@ class FakeClienteRepository {
         estadoCivil: "Casado",
         rg: "MG-123456",
         codigoAgencia: 21223,
+        contas: [],
       },
     ];
   }

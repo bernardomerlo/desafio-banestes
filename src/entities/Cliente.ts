@@ -1,3 +1,5 @@
+import { Conta } from "./Conta";
+
 export interface Cliente {
   id: string;
   cpfCnpj: string;
@@ -11,4 +13,5 @@ export interface Cliente {
   patrimonio: number;
   estadoCivil: "Solteiro" | "Casado" | "Viúvo" | "Divorciado";
   codigoAgencia: number;
+  contas: Conta[];
 }

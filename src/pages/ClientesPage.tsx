@@ -28,7 +28,7 @@ export const ClientesPage = () => {
       const renda = cliente.rendaAnual || 0;
       const patrimonio = cliente.patrimonio || 0;
 
-      const { rendaMin, rendaMax, patrimonioMin, patrimonioMax } =
+      const { rendaMin, rendaMax, patrimonioMin, patrimonioMax, tipoConta } =
         filtrosAvancados;
 
       const dentroRenda =
@@ -39,7 +39,10 @@ export const ClientesPage = () => {
         (!patrimonioMin || patrimonio >= parseFloat(patrimonioMin)) &&
         (!patrimonioMax || patrimonio <= parseFloat(patrimonioMax));
 
-      return buscaTexto && dentroRenda && dentroPatrimonio;
+      const tipoContaValida =
+        !tipoConta || cliente.contas.some((conta) => conta.tipo === tipoConta);
+
+      return buscaTexto && dentroRenda && dentroPatrimonio && tipoContaValida;
     });
   }, [clientes, filtro, filtrosAvancados]);
 
@@ -145,6 +148,23 @@ export const ClientesPage = () => {
               }
               className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
             />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">Tipo de Conta</label>
+            <select
+              value={filtrosAvancados.tipoConta}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  tipoConta: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            >
+              <option value="">Todos</option>
+              <option value="corrente">Conta Corrente</option>
+              <option value="poupanca">Conta Poupança</option>
+            </select>
           </div>
         </div>
       )}

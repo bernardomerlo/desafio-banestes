@@ -18,6 +18,7 @@ class FakeClienteRepository {
         estadoCivil: "Solteiro",
         rg: "123456",
         codigoAgencia: 1,
+        contas: [],
       },
     ];
   }
