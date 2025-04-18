@@ -2,23 +2,67 @@ import { useState, useMemo } from "react";
 import { useClientes } from "../hooks/useClientes";
 import { useNavigate } from "react-router-dom";
 import { formatarCpfCnpj } from "../utils/formatarCpfCnpj";
+import { useAgencias } from "../hooks/useAgencias";
 
 const porPagina = 10;
 
 export const ClientesPage = () => {
   const { clientes, loading } = useClientes();
+  const { agencias, loading: loadingAg } = useAgencias();
   const [filtro, setFiltro] = useState("");
   const [pagina, setPagina] = useState(1);
   const navigate = useNavigate();
+  const [filtrosAvancados, setFiltrosAvancados] = useState({
+    rendaMin: "",
+    rendaMax: "",
+    patrimonioMin: "",
+    patrimonioMax: "",
+    tipoConta: "",
+    agenciaCodigo: "",
+  });
+
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
 
   const filtrados = useMemo(() => {
-    return clientes.filter((cliente) =>
-      [cliente.nome, cliente.cpfCnpj]
-        .join(" ")
-        .toLowerCase()
-        .includes(filtro.toLowerCase()),
-    );
-  }, [clientes, filtro]);
+    return clientes.filter((cliente) => {
+      const texto = [cliente.nome, cliente.cpfCnpj].join(" ").toLowerCase();
+      const buscaTexto = texto.includes(filtro.toLowerCase());
+
+      const renda = cliente.rendaAnual || 0;
+      const patrimonio = cliente.patrimonio || 0;
+
+      const {
+        rendaMin,
+        rendaMax,
+        patrimonioMin,
+        patrimonioMax,
+        tipoConta,
+        agenciaCodigo,
+      } = filtrosAvancados;
+
+      const dentroRenda =
+        (!rendaMin || renda >= parseFloat(rendaMin)) &&
+        (!rendaMax || renda <= parseFloat(rendaMax));
+
+      const dentroPatrimonio =
+        (!patrimonioMin || patrimonio >= parseFloat(patrimonioMin)) &&
+        (!patrimonioMax || patrimonio <= parseFloat(patrimonioMax));
+
+      const tipoContaValida =
+        !tipoConta || cliente.contas.some((conta) => conta.tipo === tipoConta);
+
+      const agenciaValida =
+        !agenciaCodigo || cliente.codigoAgencia === Number(agenciaCodigo);
+
+      return (
+        buscaTexto &&
+        dentroRenda &&
+        dentroPatrimonio &&
+        tipoContaValida &&
+        agenciaValida
+      );
+    });
+  }, [clientes, filtro, filtrosAvancados]);
 
   const paginados = useMemo(() => {
     const inicio = (pagina - 1) * porPagina;
@@ -49,6 +93,125 @@ export const ClientesPage = () => {
           className="w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
         />
       </div>
+      <div className="mb-4 flex justify-end">
+        <button
+          onClick={() => setMostrarFiltros(!mostrarFiltros)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
+        >
+          Filtros Avançados
+        </button>
+      </div>
+      {mostrarFiltros && (
+        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md border border-gray-200 shadow">
+          <div>
+            <label className="block text-sm text-gray-600">
+              Renda Anual Mínima (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.rendaMin}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  rendaMin: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">
+              Renda Anual Máxima (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.rendaMax}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  rendaMax: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">
+              Patrimônio Mínimo (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.patrimonioMin}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  patrimonioMin: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">
+              Patrimônio Máximo (R$)
+            </label>
+            <input
+              type="number"
+              value={filtrosAvancados.patrimonioMax}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  patrimonioMax: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-600">Tipo de Conta</label>
+            <select
+              value={filtrosAvancados.tipoConta}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  tipoConta: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            >
+              <option value="">Todos</option>
+              <option value="corrente">Conta Corrente</option>
+              <option value="poupanca">Conta Poupança</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-600">Agência</label>
+            <select
+              value={filtrosAvancados.agenciaCodigo}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  agenciaCodigo: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            >
+              <option value="">Todas</option>
+
+              {loadingAg ? (
+                <option disabled>Carregando...</option>
+              ) : (
+                agencias.map((ag) => (
+                  <option key={ag.codigo} value={ag.codigo}>
+                    {ag.codigo} – {ag.nome}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <p className="text-gray-500 text-center">Carregando...</p>
@@ -97,7 +260,6 @@ export const ClientesPage = () => {
             </table>
           </div>
 
-          {/* Paginação */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm text-gray-600">
               Página <strong>{pagina}</strong> de{" "}
