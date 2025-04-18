@@ -2,11 +2,13 @@ import { useState, useMemo } from "react";
 import { useClientes } from "../hooks/useClientes";
 import { useNavigate } from "react-router-dom";
 import { formatarCpfCnpj } from "../utils/formatarCpfCnpj";
+import { useAgencias } from "../hooks/useAgencias";
 
 const porPagina = 10;
 
 export const ClientesPage = () => {
   const { clientes, loading } = useClientes();
+  const { agencias, loading: loadingAg } = useAgencias();
   const [filtro, setFiltro] = useState("");
   const [pagina, setPagina] = useState(1);
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ export const ClientesPage = () => {
     patrimonioMin: "",
     patrimonioMax: "",
     tipoConta: "",
+    agenciaCodigo: "",
   });
 
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
@@ -28,8 +31,14 @@ export const ClientesPage = () => {
       const renda = cliente.rendaAnual || 0;
       const patrimonio = cliente.patrimonio || 0;
 
-      const { rendaMin, rendaMax, patrimonioMin, patrimonioMax, tipoConta } =
-        filtrosAvancados;
+      const {
+        rendaMin,
+        rendaMax,
+        patrimonioMin,
+        patrimonioMax,
+        tipoConta,
+        agenciaCodigo,
+      } = filtrosAvancados;
 
       const dentroRenda =
         (!rendaMin || renda >= parseFloat(rendaMin)) &&
@@ -42,7 +51,16 @@ export const ClientesPage = () => {
       const tipoContaValida =
         !tipoConta || cliente.contas.some((conta) => conta.tipo === tipoConta);
 
-      return buscaTexto && dentroRenda && dentroPatrimonio && tipoContaValida;
+      const agenciaValida =
+        !agenciaCodigo || cliente.codigoAgencia === Number(agenciaCodigo);
+
+      return (
+        buscaTexto &&
+        dentroRenda &&
+        dentroPatrimonio &&
+        tipoContaValida &&
+        agenciaValida
+      );
     });
   }, [clientes, filtro, filtrosAvancados]);
 
@@ -166,6 +184,32 @@ export const ClientesPage = () => {
               <option value="poupanca">Conta Poupança</option>
             </select>
           </div>
+
+          <div>
+            <label className="block text-sm text-gray-600">Agência</label>
+            <select
+              value={filtrosAvancados.agenciaCodigo}
+              onChange={(e) =>
+                setFiltrosAvancados((prev) => ({
+                  ...prev,
+                  agenciaCodigo: e.target.value,
+                }))
+              }
+              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+            >
+              <option value="">Todas</option>
+
+              {loadingAg ? (
+                <option disabled>Carregando...</option>
+              ) : (
+                agencias.map((ag) => (
+                  <option key={ag.codigo} value={ag.codigo}>
+                    {ag.codigo} – {ag.nome}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
         </div>
       )}
 
@@ -216,7 +260,6 @@ export const ClientesPage = () => {
             </table>
           </div>
 
-          {/* Paginação */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm text-gray-600">
               Página <strong>{pagina}</strong> de{" "}

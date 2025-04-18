@@ -1,3 +1,4 @@
+import { Agencia } from "./Agencia";
 import { Conta } from "./Conta";
 
 export interface Cliente {
@@ -14,4 +15,5 @@ export interface Cliente {
   estadoCivil: "Solteiro" | "Casado" | "Viúvo" | "Divorciado";
   codigoAgencia: number;
   contas: Conta[];
+  agencia: Agencia;
 }
