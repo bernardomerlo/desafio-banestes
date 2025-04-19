@@ -1,54 +1,47 @@
-# React + TypeScript + Vite
+# Desafio Banestes – Frontend (React + TypeScript)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Lista e detalhamento de clientes, contas bancárias e agências de um banco fictício.
 
-Currently, two official plugins are available:
+## Contexto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Consome CSVs públicos no Google Sheets.
+- Lista clientes com busca, paginação e filtros avançados.
+- Página de detalhes do cliente com contas e agência.
+- Estrutura mínima de DDD / Clean Architecture.
+- Testes automatizados (Jest + Testing Library).
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 + Vite
+- TypeScript 5
+- Tailwind CSS 3
+- Jest 29, @testing‑library/react
+- (opcional) Cypress para E2E
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+## Pré‑requisitos
+
+```bash
+Node 19+
+npm 9+
+git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Instalação
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
 ```
+git clone https://github.com/bernardomerlo/desafio-banestes.git
+cd desafio-banestes
+npm install
+```
+
+## Scripts
+
+| Comando          | Ação                                     |
+| ---------------- | ---------------------------------------- |
+| npm run dev      | servidor de desenvolvimento (porta 5173) |
+| npm run build    | build de produção em dist/               |
+| npm run preview  | serve o build localmente                 |
+| npm test         | roda Jest uma vez                        |
+| npm run coverage | relatório de cobertura                   |
+| npm run lint     | ESLint + Prettier                        |
+
