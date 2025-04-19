@@ -19,6 +19,6 @@ it("converte strings numéricas em números", async () => {
   const sut = new GetClientes(repoStub as any);
   const [c] = await sut.execute();
 
-  expect(c.rendaAnual).toBe(1000); 
+  expect(c.rendaAnual).toBe(1000);
   expect(c.codigoAgencia).toBe(1001);
 });
