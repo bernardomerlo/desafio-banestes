@@ -1,8 +1,10 @@
 import { Cliente } from "../entities/Cliente";
-import { ClienteRepository } from "../infrastructure/repositories/ClienteRepository";
+export interface IClienteRepo {
+  fetchClientes(): Promise<Cliente[]>;
+}
 
 export class GetClientes {
-  constructor(private repo: ClienteRepository) {}
+  constructor(private repo: IClienteRepo) {}
 
   async execute(): Promise<Cliente[]> {
     const data = await this.repo.fetchClientes();
