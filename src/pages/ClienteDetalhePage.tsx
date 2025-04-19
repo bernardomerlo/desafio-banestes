@@ -7,28 +7,30 @@ export default function ClienteDetalhesPage() {
   const { data, loading } = useClienteDetalhes(id ?? "");
 
   if (loading)
-    return <p className="p-8 text-gray-500 text-center">Carregando...</p>;
+    return <p className="p-12 text-center text-gray-500">Carregando...</p>;
+
   if (!data)
     return (
-      <p className="p-8 text-red-500 text-center">Cliente não encontrado.</p>
+      <p className="p-12 text-center text-red-500">Cliente não encontrado.</p>
     );
 
   const { cliente, contas, agencia } = data;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-100">
       <Link
         to="/"
-        className="inline-block mb-6 text-sm text-blue-600 hover:underline transition"
+        className="mb-8 inline-block text-sm font-medium text-blue-600 hover:underline"
       >
         ← Voltar
       </Link>
 
-      <section className="space-y-2 mb-10">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+      {/* cartão: detalhes do cliente */}
+      <section className="mb-10 rounded-lg bg-white p-8 shadow ring-1 ring-gray-200">
+        <h2 className="mb-6 text-2xl font-semibold text-gray-800">
           Detalhes do Cliente
         </h2>
-        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-700">
+        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm text-gray-700">
           <div>
             <dt className="font-medium">Nome</dt>
             <dd>{cliente.nome}</dd>
@@ -68,8 +70,8 @@ export default function ClienteDetalhesPage() {
         </dl>
       </section>
 
-      <section className="mb-10">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">
+      <section className="mb-10 rounded-lg bg-white p-8 shadow ring-1 ring-gray-200">
+        <h3 className="mb-6 text-xl font-semibold text-gray-800">
           Contas Bancárias
         </h3>
         {contas.length === 0 ? (
@@ -77,39 +79,65 @@ export default function ClienteDetalhesPage() {
             Este cliente não possui contas cadastradas.
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-md border border-gray-200 shadow-sm">
-            <table className="min-w-full text-sm text-left text-gray-700">
-              <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-                <tr>
-                  <th className="px-4 py-3">Tipo</th>
-                  <th className="px-4 py-3">Saldo</th>
-                  <th className="px-4 py-3">Limite de Crédito</th>
-                  <th className="px-4 py-3">Crédito Disponível</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
-                {contas.map((c) => (
-                  <tr key={c.id} className="hover:bg-blue-50 transition">
-                    <td className="px-4 py-3">{c.tipo}</td>
-                    <td className="px-4 py-3">R$ {c.saldo.toLocaleString()}</td>
-                    <td className="px-4 py-3">
-                      R$ {c.limiteCredito.toLocaleString()}
-                    </td>
-                    <td className="px-4 py-3">
-                      R$ {c.creditoDisponivel.toLocaleString()}
-                    </td>
+          <>
+            <ul className="sm:hidden space-y-4">
+              {contas.map((c) => (
+                <li
+                  key={c.id}
+                  className="rounded-lg bg-white p-4 shadow ring-1 ring-gray-200"
+                >
+                  <p className="font-semibold text-gray-800">{c.tipo}</p>
+                  <p className="text-sm text-gray-600">
+                    Saldo:&nbsp;R$ {c.saldo.toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Limite:&nbsp;R$ {c.limiteCredito.toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Disponível:&nbsp;R$ {c.creditoDisponivel.toLocaleString()}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <div className="hidden sm:block overflow-x-auto rounded-md ring-1 ring-gray-200">
+              <table className="w-full divide-y divide-gray-200 bg-white text-left text-sm text-gray-700">
+                <thead className="sticky top-0 z-10 bg-gray-50 text-xs uppercase text-gray-500">
+                  <tr>
+                    <th className="px-5 py-3">Tipo</th>
+                    <th className="px-5 py-3">Saldo</th>
+                    <th className="px-5 py-3">Limite de Crédito</th>
+                    <th className="px-5 py-3">Crédito Disponível</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {contas.map((c) => (
+                    <tr
+                      key={c.id}
+                      className="bg-white transition-colors hover:bg-blue-50/60"
+                    >
+                      <td className="px-5 py-3">{c.tipo}</td>
+                      <td className="px-5 py-3">
+                        R$ {c.saldo.toLocaleString()}
+                      </td>
+                      <td className="px-5 py-3">
+                        R$ {c.limiteCredito.toLocaleString()}
+                      </td>
+                      <td className="px-5 py-3">
+                        R$ {c.creditoDisponivel.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
 
-      <section>
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Agência</h3>
+      <section className="rounded-lg bg-white p-8 shadow ring-1 ring-gray-200">
+        <h3 className="mb-6 text-xl font-semibold text-gray-800">Agência</h3>
         {agencia ? (
-          <dl className="text-sm text-gray-700 space-y-2">
+          <dl className="space-y-4 text-sm text-gray-700">
             <div>
               <dt className="font-medium">Nome</dt>
               <dd>{agencia.nome}</dd>

@@ -72,12 +72,12 @@ export const ClientesPage = () => {
   const totalPaginas = Math.ceil(filtrados.length / porPagina);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-100">
+      <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight mb-8">
         Lista de Clientes
       </h1>
 
-      <div className="mb-6">
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
         <label htmlFor="busca" className="sr-only">
           Buscar cliente
         </label>
@@ -90,21 +90,24 @@ export const ClientesPage = () => {
             setFiltro(e.target.value);
             setPagina(1);
           }}
-          className="w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
+          className="sm:flex-1 w-full rounded-lg border border-gray-300 bg-white px-5 py-3 text-gray-700 placeholder-gray-400 shadow-sm focus:border-blue-600 focus:ring-4 focus:ring-blue-200 transition-colors duration-150"
         />
-      </div>
-      <div className="mb-4 flex justify-end">
+
         <button
           onClick={() => setMostrarFiltros(!mostrarFiltros)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
+          className="flex-shrink-0 flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-blue-700 active:scale-95 transition"
         >
           Filtros Avançados
         </button>
       </div>
+
       {mostrarFiltros && (
-        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md border border-gray-200 shadow">
+        <div className="mb-8 mx-auto max-w-4xl grid sm:grid-cols-2 gap-6 rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+          <h2 className="col-span-full mb-4 text-lg font-semibold text-gray-800">
+            Filtros Avançados
+          </h2>
           <div>
-            <label className="block text-sm text-gray-600">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
               Renda Anual Mínima (R$)
             </label>
             <input
@@ -116,11 +119,12 @@ export const ClientesPage = () => {
                   rendaMin: e.target.value,
                 }))
               }
-              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+              className="w-full rounded-md border-gray-300 bg-gray-50 px-3 py-2 text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-200"
             />
           </div>
+
           <div>
-            <label className="block text-sm text-gray-600">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
               Renda Anual Máxima (R$)
             </label>
             <input
@@ -132,11 +136,12 @@ export const ClientesPage = () => {
                   rendaMax: e.target.value,
                 }))
               }
-              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+              className="w-full rounded-md border-gray-300 bg-gray-50 px-3 py-2 text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-200"
             />
           </div>
+
           <div>
-            <label className="block text-sm text-gray-600">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
               Patrimônio Mínimo (R$)
             </label>
             <input
@@ -148,11 +153,12 @@ export const ClientesPage = () => {
                   patrimonioMin: e.target.value,
                 }))
               }
-              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+              className="w-full rounded-md border-gray-300 bg-gray-50 px-3 py-2 text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-200"
             />
           </div>
+
           <div>
-            <label className="block text-sm text-gray-600">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
               Patrimônio Máximo (R$)
             </label>
             <input
@@ -164,11 +170,14 @@ export const ClientesPage = () => {
                   patrimonioMax: e.target.value,
                 }))
               }
-              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+              className="w-full rounded-md border-gray-300 bg-gray-50 px-3 py-2 text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-200"
             />
           </div>
+
           <div>
-            <label className="block text-sm text-gray-600">Tipo de Conta</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Tipo de Conta
+            </label>
             <select
               value={filtrosAvancados.tipoConta}
               onChange={(e) =>
@@ -177,7 +186,7 @@ export const ClientesPage = () => {
                   tipoConta: e.target.value,
                 }))
               }
-              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+              className="w-full rounded-md border-gray-300 bg-gray-50 px-3 py-2 text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-200"
             >
               <option value="">Todos</option>
               <option value="corrente">Conta Corrente</option>
@@ -186,7 +195,9 @@ export const ClientesPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600">Agência</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Agência
+            </label>
             <select
               value={filtrosAvancados.agenciaCodigo}
               onChange={(e) =>
@@ -195,10 +206,9 @@ export const ClientesPage = () => {
                   agenciaCodigo: e.target.value,
                 }))
               }
-              className="mt-1 w-full px-3 py-2 border rounded-md text-gray-700"
+              className="w-full rounded-md border-gray-300 bg-gray-50 px-3 py-2 text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-200"
             >
               <option value="">Todas</option>
-
               {loadingAg ? (
                 <option disabled>Carregando...</option>
               ) : (
@@ -214,23 +224,41 @@ export const ClientesPage = () => {
       )}
 
       {loading ? (
-        <p className="text-gray-500 text-center">Carregando...</p>
+        <p className="text-center text-gray-500">Carregando...</p>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-md shadow ring-1 ring-black ring-opacity-5">
-            <table className="min-w-full divide-y divide-gray-200 bg-white">
-              <thead className="bg-gray-50">
+          <div className="sm:overflow-x-auto overflow-visible rounded-lg shadow ring-1 ring-black/5">
+            <ul className="sm:hidden space-y-4">
+              {paginados.map((c) => (
+                <li
+                  key={c.id}
+                  onClick={() => navigate(`/clientes/${c.id}`)}
+                  className="cursor-pointer rounded-lg bg-white p-4 shadow hover:bg-blue-50/60 transition-colors"
+                >
+                  <p className="font-semibold text-gray-800">{c.nome}</p>
+                  <p className="text-sm text-gray-600">
+                    {formatarCpfCnpj(c.cpfCnpj)}
+                  </p>
+                  <p className="text-sm text-gray-600">{c.email}</p>
+                  <p className="text-sm text-gray-600">
+                    R$ {c.rendaAnual.toLocaleString()}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <table className="hidden sm:table w-full divide-y divide-gray-200 bg-white">
+              <thead className="bg-gray-100 sticky top-0 z-10">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 tracking-wider">
                     Nome
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 tracking-wider">
                     CPF/CNPJ
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 tracking-wider">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 tracking-wider">
                     Renda Anual
                   </th>
                 </tr>
@@ -240,9 +268,9 @@ export const ClientesPage = () => {
                   <tr
                     key={cliente.id}
                     onClick={() => navigate(`/clientes/${cliente.id}`)}
-                    className="hover:bg-blue-50 cursor-pointer transition-colors"
+                    className="cursor-pointer bg-white hover:bg-blue-50/60 transition-colors duration-100"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
                       {cliente.nome}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
@@ -260,37 +288,34 @@ export const ClientesPage = () => {
             </table>
           </div>
 
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-sm text-gray-600">
+          <div className="mt-10 flex flex-col items-center justify-between gap-6 sm:flex-row">
+            <span className="text-sm text-gray-600">
               Página <strong>{pagina}</strong> de{" "}
               <strong>{totalPaginas}</strong>
-            </div>
+            </span>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 onClick={() => setPagina((prev) => Math.max(prev - 1, 1))}
                 disabled={pagina === 1}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition 
-                  ${
-                    pagina === 1
-                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
+                className={`rounded-md px-5 py-2 text-sm font-semibold shadow transition ${
+                  pagina === 1
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-blue-600 text-white hover:bg-blue-700 active:scale-95"
+                }`}
               >
                 Anterior
               </button>
-
               <button
                 onClick={() =>
                   setPagina((prev) => Math.min(prev + 1, totalPaginas))
                 }
                 disabled={pagina === totalPaginas}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition 
-                  ${
-                    pagina === totalPaginas
-                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
+                className={`rounded-md px-5 py-2 text-sm font-semibold shadow transition ${
+                  pagina === totalPaginas
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-blue-600 text-white hover:bg-blue-700 active:scale-95"
+                }`}
               >
                 Próxima
               </button>
